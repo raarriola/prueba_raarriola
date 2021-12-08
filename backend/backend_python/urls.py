@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from users.views import user_list, user, permissions
-from inventory.views import product_list, product, product_list_home, image
+from inventory.views import product_list, product, product_list_home, image, image64
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
 
@@ -26,6 +26,7 @@ urlpatterns = [
     path('user/<int:pk>', user,name="user"),
     path('permissions/<slug:module>', permissions,name="perm"),
     path('product/<int:pk>/image', image,name="image"),
+    path('product/<int:pk>/image64', image64,name="image64"),
     path('product/<int:pk>', product,name="product"),
     path('products/home', product_list_home,name="product_list_home"),
     path('products', product_list,name="product_list"), 

@@ -14,5 +14,5 @@ class Product(models.Model):
     update_user= models.IntegerField(blank=True, null=True)
     delete_date= models.DateTimeField(blank=True, null=True)
     delete_user= models.IntegerField(blank=True, null=True)
-    image = models.ImageField(null=True)
+    image = models.ImageField(null=True, upload_to='inventory/products/')
     active = models.BooleanField()

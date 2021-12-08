@@ -7,13 +7,14 @@ from users import functions
 from rest_framework.response import Response
 from datetime import datetime
 import io
+import base64
 from rest_framework.permissions import AllowAny 
 from rest_framework.parsers import JSONParser
 from rest_framework_simplejwt.models import TokenUser
 from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
-from django.http import FileResponse
+from django.http import FileResponse,HttpResponse
 
 
 class ProductPublicViewSet(TokenObtainPairView):
@@ -58,6 +59,18 @@ class ProductViewSet(viewsets.ViewSet):
         img = open(instance.image.path, 'rb')
         response = FileResponse(img)
         return response
+    
+    def get_image_base64(self,request,pk):
+        user = User.objects.get(id=request.user.id)
+        if(user.has_perm('inventory.view_product')==False):
+            return Response({"detail":"No se tiene permiso para esta accion"},status.HTTP_403_FORBIDDEN)
+        instance = Product.objects.get(id=pk)
+        try:
+            with open(instance.image.path, 'rb') as img:
+                encod = base64.b64encode(img.read())
+            return HttpResponse(encod)
+        except:
+            return HttpResponse("")
 
     def create(self,request,*args, **kwargs):
         user = User.objects.get(id=request.user.id)
@@ -112,4 +125,7 @@ product = ProductViewSet.as_view({
 image = ProductViewSet.as_view({
     'post':'load_image',
     'get':'get_image'
+})
+image64 = ProductViewSet.as_view({
+    'get':'get_image_base64'
 })
