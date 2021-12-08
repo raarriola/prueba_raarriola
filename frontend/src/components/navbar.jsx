@@ -34,8 +34,9 @@ const Header = (props) => {
                                 placeholder="Buscar"
                                 className="me-2 search-input"
                                 aria-label="Buscar"
+
                             />
-                            <Button variant="success btn-search btn-circle btn-sm"> <BsSearch className="icon-search"/></Button>
+                            <Button variant="success btn-search btn-circle btn-sm" onClick={(e)=>navigate("/")}> <BsSearch className="icon-search"/></Button>
                         </Form></Col>
                         <Col sm={3}>
                             <div class="d-flex flex-row-reverse">
