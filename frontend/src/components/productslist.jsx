@@ -11,7 +11,7 @@ const ProductsList = (props) => {
                 {props.items.map(i=>
                 <Col sm={4} className="d-flex justify-content-center">
                     <CardItem title={i.name} img={i.img}>
-                        {i.description}
+                        {i.price}
                     </CardItem>
                 </Col>)
                 }

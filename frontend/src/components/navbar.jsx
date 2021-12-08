@@ -1,7 +1,24 @@
 import React from 'react'
 import { Navbar, Container,Row,Nav, Col, Form, FormControl, Button } from 'react-bootstrap';
 import { BsSearch } from 'react-icons/bs'
+import { useNavigate } from 'react-router';
+import { isSigned,logout } from '../utils/api';
 const Header = (props) => {
+    let navigate = useNavigate();
+    const [isSign,setIsSign] = React.useState(false)
+    const [isLoading,setIsLoading] = React.useState(true)
+    React.useEffect(() => {
+        async function fetchdata(){
+            const data = await isSigned()
+            console.log('data',data)
+            setIsSign(data.signed)
+        }
+        fetchdata()
+    })
+    const logOut = async ()=>{
+        await logout();
+        navigate("/")
+    }
     return (
         <Navbar collapseOnSelect expand="lg" bg="primary " variant="dark" className="fixed-top">
             <Container>
@@ -22,7 +39,9 @@ const Header = (props) => {
                         </Form></Col>
                         <Col sm={3}>
                             <div class="d-flex flex-row-reverse">
-                                <Button variant="outline-success">ads</Button>
+                                {isSign?<Button variant="outline-success" onClick={(e)=>logOut()}>Log out</Button>:null}
+                                {!isSign?<Button variant="outline-success" onClick={(e)=>navigate("/login")}>Log in</Button>:null}
+                                {isSign?<Button variant="outline-success" onClick={(e)=>navigate("/admin")}>Admin</Button>:null}
                             </div>
                         </Col>
                     </Row></Container>

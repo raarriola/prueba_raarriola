@@ -4,7 +4,7 @@ from rest_framework import serializers
 class ProductListSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Product
-        fields = ['id', 'name', 'price', 'sku', 'inventory']
+        fields = ['id', 'name', 'price', 'sku', 'inventory', 'image', 'description']
 
 class ProductDetailSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

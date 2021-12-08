@@ -3,7 +3,7 @@ import { Container, Table, ButtonGroup, Pagination, Row, Col } from 'react-boots
 import { BsEyeFill, BsFillTrashFill, BsPencilFill, BsPlus, BsPlusCircleFill } from 'react-icons/bs'
 import ComboBox from '../../components/combobox'
 import IconButton from '../../components/iconbutton'
-
+import {get} from '../../utils/api'
 const AdminProducts = (props) => {
     const [products,setProducts] = React.useState([])
     const [pageNumber,setPageNumber] = React.useState(1)
@@ -11,12 +11,14 @@ const AdminProducts = (props) => {
     const [totalPages,setTotalPages] = React.useState(10)
     const [activePage,setActivePage] = React.useState(1)
     React.useEffect(()=>{
-        setProducts([
-            {id:1,name:"P1",sku:"P100001",price:12.00},
-            {id:2,name:"P2",sku:"P200002",price:13.00},
-            {id:3,name:"P3",sku:"P300003",price:14.00},
-            {id:4,name:"P4",sku:"P400004",price:15.00}
-        ])
+        async function fetchdata(){
+            try{
+            const data = await get('products',true)
+            setProducts(data)
+            }
+            catch(ex){}
+        }
+        fetchdata()
     },[])
     return (
         <div>
@@ -33,7 +35,9 @@ const AdminProducts = (props) => {
                         <th>Id</th>
                         <th>Nombre</th>
                         <th>SKU</th>
+                        <th>Descripcion</th>
                         <th>Precio</th>
+                        <th>Cantidad</th>
                         <th> <IconButton icon={<BsPlusCircleFill/>}/></th>
                     </tr>
                 </thead>
@@ -45,7 +49,9 @@ const AdminProducts = (props) => {
                         <td>{item.id}</td>
                         <td>{item.name}</td>
                         <td>{item.sku}</td>
+                        <td>{item.description}</td>
                         <td>{item.price}</td>
+                        <td>{item.inventory}</td>
                         <td>
                             <ButtonGroup>
                                 <IconButton icon={<BsEyeFill/>}/>
