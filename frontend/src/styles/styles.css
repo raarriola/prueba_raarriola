@@ -1,0 +1,83 @@
+.App{
+    background-color: #fcf9f9ee;
+}
+.bg-primary{
+    background-color: #28569C !important;
+    color: white;
+}
+.page-item.active .page-link{
+    background-color: #28569C !important;
+    border-color: #28569C !important;
+}
+.btn-outline-primary{
+   color: #28569C !important;
+   border:0;
+}
+.btn-outline-primary:hover{
+    color: white    !important;
+    background-color: #28569C !important ;
+    border-color:none !important;
+ }
+ .btn-outline-primary:focus{
+    box-shadow: none;
+ }
+.btn-search.btn-sm{
+    background-color: rgb(148, 213, 41) !important;
+    color: #28569C !important;
+    border: rgb(148, 213, 41) !important;
+    box-shadow: none;
+}
+.card-item{
+    margin: 8px 0px 0px 0px;
+}
+.btn-search.btn-sm:focus{
+    background-color: rgb(113, 163, 33) !important;
+    border: rgb(113, 163, 33) !important;
+    box-shadow: none;
+}
+.fs-5{
+    font-size: 1rem !important;
+    margin-bottom: 5px;
+}
+
+.fs-6{
+    font-size: 0.75rem !important;
+    margin-bottom: 5px;
+}
+ul{
+    list-style-type: none;
+    padding: 0; 
+}
+
+.icon-search{
+    width: 20px;
+    height: 20px;
+}
+.btn-circle{
+    border-radius:15px;
+    height: 30px;
+    width: 30px;
+    display: inherit;
+    align-items: center;
+}
+.search-bord{
+    background-color: white !important;
+    color: white !important;
+    padding: 3px 3px 3px 10px;
+    border-radius: 30px;
+}
+.search-input{
+    border: white !important;
+    font-size: 0.80rem;
+    padding:0;
+    box-shadow: none !important;
+}
+.container-card{
+    padding: 0px 0px;
+}
+.body-card{
+    padding: 8px 8px;
+}
+.body{
+    background-color: #fcf9f9ee;
+}
