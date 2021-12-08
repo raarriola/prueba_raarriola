@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 'secur!ty.2021'
+      MYSQL_DATABASE: 'test_db'
+      MYSQL_USER: 'user'
+      MYSQL_PASSWORD: 'US3R'
+    ports:
+      - 3306:3306
+    expose:
+      - 3306
+    volumes:
+      - source: mysql-db
+        target: /var/lib/mysql
+        type: volume
+volumes:
+  mysql-db:
+
+
+
