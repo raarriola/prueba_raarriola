@@ -7,6 +7,7 @@ from users import functions
 from rest_framework.response import Response
 from datetime import datetime
 import io
+import pathlib
 import base64
 from rest_framework.permissions import AllowAny 
 from rest_framework.parsers import JSONParser
@@ -15,13 +16,30 @@ from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.authentication import JWTTokenUserAuthentication
 from django.http import FileResponse,HttpResponse
+from rest_framework.permissions import AllowAny
+from rest_framework.decorators import api_view, permission_classes
 
 
-class ProductPublicViewSet(TokenObtainPairView):
-    def get(self, request):
-        queryset = Product.objects.filter(active=True).exclude(inventory__lte=5)
-        serializer = ProductListSerializer(queryset, many=True)
-        return Response(serializer.data)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def product_list_home(request):
+    queryset = Product.objects.filter(active=True).exclude(inventory__lte=5)
+    serializer = ProductListSerializer(queryset, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def image64(request,pk):
+    instance = Product.objects.get(id=pk)
+    with open(instance.image.path, 'rb') as img:
+        ext = pathlib.Path(instance.image.path).suffix.replace('.','')
+        print(ext)
+        encod = base64.b64encode(img.read())
+        first = "data:image/"+ext+";base64,"
+    return Response({
+        'head':first,
+        'encod':encod
+        })
 
 class ProductViewSet(viewsets.ViewSet):
     def list(self, request):
@@ -60,17 +78,8 @@ class ProductViewSet(viewsets.ViewSet):
         response = FileResponse(img)
         return response
     
-    def get_image_base64(self,request,pk):
-        user = User.objects.get(id=request.user.id)
-        if(user.has_perm('inventory.view_product')==False):
-            return Response({"detail":"No se tiene permiso para esta accion"},status.HTTP_403_FORBIDDEN)
-        instance = Product.objects.get(id=pk)
-        try:
-            with open(instance.image.path, 'rb') as img:
-                encod = base64.b64encode(img.read())
-            return HttpResponse(encod)
-        except:
-            return HttpResponse("")
+
+
 
     def create(self,request,*args, **kwargs):
         user = User.objects.get(id=request.user.id)
@@ -80,6 +89,10 @@ class ProductViewSet(viewsets.ViewSet):
         data["active"]=True
         data["create_date"]=datetime.now()
         data["create_user"]=user.id
+        try:
+            data.pop('image')
+        except:
+            print('error')
         serializer = ProductWriteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -93,6 +106,10 @@ class ProductViewSet(viewsets.ViewSet):
         data = request.data
         data["update_date"] = datetime.now()
         data["update_user"]=user.id
+        try:
+            data.pop('image')
+        except:
+            print('error')
         serializer = ProductWriteSerializer(instance,data=data,partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -115,7 +132,7 @@ product_list= ProductViewSet.as_view({
     'get': 'list',
     'post':'create'
 })
-product_list_home= ProductPublicViewSet.as_view()
+
 product = ProductViewSet.as_view({
     'get':'retrieve',
     'put':'partial_update',
@@ -125,7 +142,4 @@ product = ProductViewSet.as_view({
 image = ProductViewSet.as_view({
     'post':'load_image',
     'get':'get_image'
-})
-image64 = ProductViewSet.as_view({
-    'get':'get_image_base64'
 })

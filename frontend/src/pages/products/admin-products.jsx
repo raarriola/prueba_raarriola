@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Table, ButtonGroup, Pagination, Row, Col, Modal, Button, Form,FloatingLabel } from 'react-bootstrap'
+import { Container, Table, ButtonGroup, Pagination, Row, Col, Modal, Button, Form,FloatingLabel, Image } from 'react-bootstrap'
 import { BsEyeFill, BsFillTrashFill, BsPencilFill, BsPlus, BsPlusCircleFill} from 'react-icons/bs'
 import ComboBox from '../../components/combobox'
 import IconButton from '../../components/iconbutton'
@@ -7,6 +7,8 @@ import ModalProduct from './components/modal'
 import {destroy, get,post, put} from '../../utils/api'
 import {useFormik} from 'formik'
 const AdminProducts = (props) => {
+    const [img,setImg] = React.useState(null) 
+    const [base64,setBase64] = React.useState('')
     const formik = useFormik({
         initialValues:{
             id:0,
@@ -35,6 +37,12 @@ const AdminProducts = (props) => {
             if(createMode){
                 const data = await post('products',true,formik.values)
                 setProducts([...products,data])
+                if(img){
+                    let fdata = new FormData()
+                    fdata.append('image',img)
+                    console.log(fdata)
+                    const resp = await post(`product/${data.id}/image`,true,fdata)
+                }
             }
             else if(editMode)
             {
@@ -46,10 +54,16 @@ const AdminProducts = (props) => {
                     else
                         return i
                 }))
+                if(img){
+                    let fdata = new FormData()
+                    fdata.append('image',img)
+                    console.log(fdata)
+                    const resp = await post(`product/${formik.values.id}/image`,true,fdata)
+                }
             }
             setOpenDialog(false)
         }
-        catch(ex){}
+        catch(ex){console.log(ex)}
     }
     const [products,setProducts] = React.useState([])
     const [openDialog,setOpenDialog] = React.useState(false)
@@ -69,17 +83,34 @@ const AdminProducts = (props) => {
         }
         fetchdata()
     },[])
+    React.useEffect(()=>{
+        async function fetchdata(){
+            try{
+                const data = await get('products',true)
+                setProducts(data)
+            }
+            catch(ex){}
+        }
+        fetchdata()
+    },[])
     const loadProduct = async(id)=>{
         try{
             console.log('sssss')
             const data = await get(`product/${id}`,true)
+            setBase64('')
             formik.setFieldValue('id',data.id)
             formik.setFieldValue('name',data.name)
             formik.setFieldValue('sku',data.sku)
             formik.setFieldValue('description',data.description)
             formik.setFieldValue('price',Number(data.price))
             formik.setFieldValue('inventory',Number(data.inventory))
+            formik.setFieldValue('image',data.image)
             setOpenDialog(true)
+            get(`product/${id}/image64`,true).then(result=>{
+                if(result){
+                    setBase64(result.head+result.encod)
+                }
+            })
         }
         catch(ex){
 
@@ -103,14 +134,15 @@ const AdminProducts = (props) => {
                     <Form.Control placeholder="Descripcion" required 
                         readOnly={!(createMode|editMode)} className="mb-2"  onChange={formik.handleChange} value={formik.values.description}/></FloatingLabel>
                 <FloatingLabel label="Precio" controlId="price">
-                    <Form.Control placeholder="Precio" required className="mb-2"  type="number" min="0.1" step="0.1"
+                    <Form.Control placeholder="Precio" required className="mb-2"  type="number" min="0.1" step="0.01"
                         readOnly={!(createMode|editMode)} onChange={formik.handleChange} value={formik.values.price}/></FloatingLabel>
                 <FloatingLabel label="Cantidad" controlId="inventory">
                     <Form.Control placeholder="Cantidad" required className="mb-2" type="number" min="1" step="1"
                         readOnly={!(createMode|editMode)} onChange={formik.handleChange} value={formik.values.inventory}/></FloatingLabel>
                 <Form.Group controlId="formFileSm" className="mb-2" >
-                    <Form.Control type="file" size="sm" accept="image/*" disabled={!(createMode|editMode)}/>
+                    <Form.Control type="file" size="sm" accept="image/*" onChange={(e)=>setImg(e.target.files[0])} disabled={!(createMode|editMode)}/>
                 </Form.Group>
+                <Image src={base64} fluid />
             </Modal.Body>
             
             <Modal.Footer>
@@ -136,7 +168,7 @@ const AdminProducts = (props) => {
                         <th>Precio</th>
                         <th>Cantidad</th>
                         <th> <IconButton icon={<BsPlusCircleFill/>}
-                            onClick={(e)=>{formik.resetForm();setOpenDialog(true); setEditMode(false); setCreateMode(true)}}/></th>
+                            onClick={(e)=>{setBase64('');formik.resetForm();setOpenDialog(true); setEditMode(false); setCreateMode(true)}}/></th>
                     </tr>
                 </thead>
                 <tbody>

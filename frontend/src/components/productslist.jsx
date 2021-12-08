@@ -10,8 +10,8 @@ const ProductsList = (props) => {
             <Row>
                 {props.items.map(i=>
                 <Col sm={4} className="d-flex justify-content-center">
-                    <CardItem title={i.name} img={i.img}>
-                        {i.price}
+                    <CardItem title={i.name} img={i.img} id={i.id}>
+                        Q. {i.price}
                     </CardItem>
                 </Col>)
                 }
