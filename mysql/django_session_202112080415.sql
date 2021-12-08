@@ -1,0 +1,2 @@
+INSERT INTO test_db.django_session (session_key,session_data,expire_date) VALUES
+	 ('ftfigklk5hky4iy1kjfe2tkwapcm3w23','.eJxVjEEOwiAQRe_C2pBCgYJL9z0DGWYGqRqalHZlvLtt0oVu33v_v0WEbS1xa7zEicRVKHH5ZQnwyfUQ9IB6nyXOdV2mJI9EnrbJcSZ-3c7276BAK_salUVi6zSSduCROpsdD0YNJjgklTsTMlq_Y9KALnvkPvSJuLdGaRCfL_h_OGY:1mumb1:Ezdruv0LHgDPJDYWT9hvnck75KmXPCh3N0Pgiy-YziQ','2021-12-22 02:22:15.386781000');

@@ -1,0 +1,4 @@
+INSERT INTO test_db.auth_user (password,last_login,is_superuser,username,first_name,last_name,email,is_staff,is_active,date_joined) VALUES
+	 ('pbkdf2_sha256$260000$1HQ9UtANnwLQHOxRLOemkJ$unsUroaFSG7/KNEvOp3SkAYJI1FchF0Gy1Soyj54qXQ=','2021-12-08 02:22:15.381781000',1,'admin','','','',1,1,'2021-12-08 02:21:43.701749000'),
+	 ('pbkdf2_sha256$260000$eqKjN5K8SLEZlcnfbgBWYg$y75dtztR7MOF7EL9IKqsLou2fjwQAHNvjR8Srn3Zn7o=',NULL,0,'administrador1','Administrador','Prueba','admin@example.com',1,1,'2021-12-08 02:22:37'),
+	 ('pbkdf2_sha256$260000$0FHmoszkIntRRId2xZ8ol1$/nlrrV7h8kr7AMUBVtDqBYOj2Jvsn4Xb1qYqSiPi6eo=',NULL,0,'colaborador1','Colaborador','Prueba','col@example.com',1,1,'2021-12-08 02:24:16');
