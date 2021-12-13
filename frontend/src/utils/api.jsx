@@ -1,5 +1,5 @@
 import axios from 'axios'
-let baseapi = 'http://localhost:8000/'
+let baseapi = 'http://144.126.213.215:8000/'
 
 const get = async (url, auth=false)=>{
     if(!auth){
